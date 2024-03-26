@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "601262614274",
+    "project_id": "test-46b26",
+    "storage_bucket": "test-46b26.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:601262614274:android:6559e29efe44352ac1841b",
+        "android_client_info": {
+          "package_name": "com.shrijan.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC10KYT70DTH14RBKMSKvUE6ggXVSWJCEA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

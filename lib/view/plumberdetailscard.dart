@@ -1,24 +1,30 @@
 import 'package:firebase/view/plumberDetailsScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:cloud_firestore/cloud_firestore.dart'; // Import Firestore
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase/view/plumber.dart';
 import '../util/string_const.dart';
 
 class PlumberDetailsCard extends StatelessWidget {
   final PlumberDetails plumberDetails;
+  final Map<String, dynamic>? userData; // Define userData here
 
-  PlumberDetailsCard(this.plumberDetails);
+  PlumberDetailsCard(this.plumberDetails, {this.userData});
 
   @override
   Widget build(BuildContext context) {
     Color statusColor = plumberDetails.available ? Colors.green : Colors.red;
     String statusText = plumberDetails.available ? 'Available' : 'Unavailable';
+     String userName = userData?['displayName'] ?? 'Unknown User';
     return GestureDetector(
       onTap: () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => PlumberDetailsScreen(plumberDetails)),
+          MaterialPageRoute(
+            builder: (context) => PlumberDetailsScreen(
+              plumberDetails: plumberDetails, // Corrected parameter name
+            )
+          ),
         );
       },
       child: Card(
@@ -65,36 +71,32 @@ class PlumberDetailsCard extends StatelessWidget {
                     statusText,
                     style: TextStyle(color: statusColor, fontWeight: FontWeight.bold),
                   ),
-               
-  FutureBuilder(
-  future: getAverageRating(plumberDetails.userId),
-  builder: (context, snapshot) {
-    if (snapshot.connectionState == ConnectionState.waiting) {
-      return CircularProgressIndicator();
-    } else if (snapshot.hasError) {
-      return Text('Error: ${snapshot.error}');
-    } else {
-      double rating = snapshot.data as double;
-      return RatingBar.builder(
-        onRatingUpdate: (value) {
-          
-        },
-        initialRating: rating,
-        minRating: 0,
-        direction: Axis.horizontal,
-        allowHalfRating: true,
-        itemCount: 5,
-        itemSize: 20,
-        ignoreGestures: true, // Make the RatingBar unclickable
-        itemBuilder: (context, _) => Icon(
-          Icons.star,
-          color: Colors.amber,
-        ),
-      );
-    }
-  },
-),
-
+                  FutureBuilder(
+                    future: getAverageRating(plumberDetails.userId),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return CircularProgressIndicator();
+                      } else if (snapshot.hasError) {
+                        return Text('Error: ${snapshot.error}');
+                      } else {
+                        double rating = snapshot.data as double;
+                        return RatingBar.builder(
+                          onRatingUpdate: (value) {},
+                          initialRating: rating,
+                          minRating: 0,
+                          direction: Axis.horizontal,
+                          allowHalfRating: true,
+                          itemCount: 5,
+                          itemSize: 20,
+                          ignoreGestures: true,
+                          itemBuilder: (context, _) => Icon(
+                            Icons.star,
+                            color: Colors.amber,
+                          ),
+                        );
+                      }
+                    },
+                  ),
                 ],
               ),
             ),
@@ -113,9 +115,10 @@ class PlumberDetailsCard extends StatelessWidget {
     int ratingCount = 0;
     for (QueryDocumentSnapshot doc in ratingSnapshot.docs) {
       if (doc['rating'] != null && doc['rating'] is num) {
-      totalRating += doc['rating'] as double;
-      ratingCount++;
-    }}
+        totalRating += doc['rating'] as double;
+        ratingCount++;
+      }
+    }
     return ratingCount > 0 ? totalRating / ratingCount : 0;
   }
 }

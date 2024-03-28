@@ -82,6 +82,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
         displayName: _name,
         photoURL: imageURL != null ? imageURL : user.photoURL,
       );
+      // Pass the user's name to the PlumberDetailsScreen
+Navigator.pop(context, _name);
+
 
       // Update user's email if it's changed
       if (_email != null && _email != user.email) {

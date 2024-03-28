@@ -119,7 +119,15 @@ class _ProfilePageState extends State<ProfilePage> {
                 context,
                 MaterialPageRoute(
                   builder: (context) =>
-                      EditProfilePage(user: user, userData: userData),
+                      EditProfilePage(
+
+                                 user: user, 
+                                  userData: {
+            'name': userData?['name'] ?? 'N/A', // Pass the user's name
+          },
+
+                        
+                        ),
                 ),
               ).then((_) {
                 // Update user data after returning from the EditProfilePage
